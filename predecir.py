@@ -6,13 +6,13 @@ import requests
 
 
 
-altura, longitud = 100, 100
+altura, longitud = 96, 96
 model = tf.keras.models.load_model('model.h5')
 
 
 
 def predecir_imagen(ruta_imagen):
-   img = Image.open(requests.get(ruta_imagen, stream = True).raw).resize((120, 120))
+   img = Image.open(requests.get(ruta_imagen, stream = True).raw).resize((altura, longitud))
    image_array = tf.keras.preprocessing.image.img_to_array(img) / 255.0
    image_array = np.expand_dims(image_array, axis=0)
 
