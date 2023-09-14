@@ -9,7 +9,7 @@ import requests
 altura, longitud = 96, 96
 model = tf.keras.models.load_model('model.h5')
 
-
+#prueba
 
 def predecir_imagen(ruta_imagen):
    img = Image.open(requests.get(ruta_imagen, stream = True).raw).resize((altura, longitud))
