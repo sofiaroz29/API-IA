@@ -19,9 +19,9 @@ def result(image_url:  str = Form(...)):
     
     try:
         resultado = predecir_imagen(image_url)
-        porcentaje = round(resultado * 100, 2);
+        porcentaje = round(resultado * 100, 2)
         print(resultado)
-        print(porcentaje);
+        print(porcentaje)
          
     except Exception as e:
         print(e)
