@@ -3,7 +3,7 @@ import base64
 from  predecir import predecir_imagen
 from PIL import Image
 import urllib.request
-from detection import PATH_TO_IMAGES, tflite_detect_images, PATH_TO_LABELS, PATH_TO_MODEL, min_conf_threshold, images_to_test
+from detection import tflite_detect_images, PATH_TO_LABELS, PATH_TO_MODEL, min_conf_threshold, images_to_test
 import base64
 
 
