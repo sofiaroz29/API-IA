@@ -21,8 +21,11 @@ def imagenRecortada(image: str = Form (...)):
     try:
         
         PATH_TO_IMAGES = base64.b64decode(image)
+        #print(PATH_TO_IMAGES)
         cropped_image = tflite_detect_image(PATH_TO_MODEL, PATH_TO_IMAGES, PATH_TO_LABELS)
-        return str(base64.b64encode(cropped_image))
+        cropped_image = str(base64.b64encode(cropped_image))
+        print(cropped_image)
+        return cropped_image
 
     except Exception as e:
         print(e)
