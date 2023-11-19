@@ -7,7 +7,7 @@ import requests
 
 
 altura, longitud = 96, 96
-model = tf.keras.models.load_model('model.h5')
+model = tf.keras.models.load_model('modelo.h5')
 
 #prueba
 

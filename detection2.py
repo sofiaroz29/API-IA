@@ -36,7 +36,7 @@ def tflite_detect_image(modelpath, image_bytes, lblpath, min_conf=0.5):
     image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     imH, imW, _ = image.shape
-    image_resized = cv2.resize(image_rgb, (width, height))
+    image_resized = cv2.resize(image, (width, height))
     input_data = np.expand_dims(image_resized, axis=0)
 
     # Ensure the image array is contiguous
@@ -67,7 +67,7 @@ def tflite_detect_image(modelpath, image_bytes, lblpath, min_conf=0.5):
             xmax = int(min(imW, (boxes[i][3] * imW)))
 
             # Crop the original image to the detected region
-            cropped_image = image_rgb[ymin:ymax, xmin:xmax].copy()
+            cropped_image = image[ymin:ymax, xmin:xmax].copy()
             detections.append([scores[i], xmin, ymin, xmax, ymax])
 
 
