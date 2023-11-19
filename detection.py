@@ -7,9 +7,11 @@ import numpy as np
 import glob
 import random
 from tensorflow.lite.python.interpreter import Interpreter
+import matplotlib
+import matplotlib.pyplot as plt
 
 ### Define function for inferencing with TFLite model and displaying results
-def tflite_detect_image(modelpath, image_bytes, lblpath, min_conf=0.5):
+def tflite_detect_image(modelpath, imgpath, lblpath, min_conf=0.5):
     # Load the label map into memory
     with open(lblpath, 'r') as f:
         labels = [line.strip() for line in f.readlines()]
@@ -27,16 +29,11 @@ def tflite_detect_image(modelpath, image_bytes, lblpath, min_conf=0.5):
     float_input = (input_details[0]['dtype'] == np.float32)
 
     # Load and resize the image to the expected shape [1xHxWx3]
-    # image = cv2.imread(imgpath)
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    image = cv2.imread(imgpath)
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     imH, imW, _ = image.shape
     image_resized = cv2.resize(image_rgb, (width, height))
     input_data = np.expand_dims(image_resized, axis=0)
-
-    # Ensure the image array is contiguous
-    input_data = np.ascontiguousarray(np.expand_dims(image_resized, axis=0))
 
     # Normalize pixel values if using a floating model (i.e., if the model is non-quantized)
     if float_input:
@@ -63,19 +60,27 @@ def tflite_detect_image(modelpath, image_bytes, lblpath, min_conf=0.5):
             xmax = int(min(imW, (boxes[i][3] * imW)))
 
             # Crop the original image to the detected region
-            cropped_image = image_rgb[ymin:ymax, xmin:xmax].copy()
+            cropped_image = image_rgb[ymin:ymax, xmin:xmax]
             detections.append([scores[i], xmin, ymin, xmax, ymax])
+     # Show the original image
+    plt.figure(figsize=(10, 5))
+    plt.subplot(1, 2, 1)
+    plt.imshow(image_rgb)
+    plt.title('Original Image')
+
+    # Show the cropped image
+    plt.subplot(1, 2, 2)
+    plt.imshow(cropped_image)
+    plt.title('Cropped Image')
     
-    # Convert the cropped image to bytes
-    _, buffer = cv2.imencode('.jpg', cropped_image)
-    cropped_image_bytes = buffer.tobytes()
-    return cropped_image_bytes
+    plt.show()
+    return cropped_image
 
 
-PATH_TO_IMAGE = ''  # Receive the image
+imgpath = 'ISIC_0024300.JPG'  # Receive the image
 PATH_TO_MODEL = 'detect.tflite'
 PATH_TO_LABELS = 'labelmap.txt'
 min_conf_threshold = 0.5
 
-#cropped_image = tflite_detect_image(PATH_TO_MODEL, PATH_TO_IMAGE, PATH_TO_LABELS, min_conf_threshold)
+cropped_image = tflite_detect_image(PATH_TO_MODEL, imgpath, PATH_TO_LABELS, min_conf_threshold)
 # cropped_image is the cropped image based on the detection
