@@ -59,7 +59,7 @@ def tflite_detect_image(modelpath, image_bytes, lblpath, min_conf=0.5):
 
     # Loop over all detections and draw detection box if confidence is above the minimum threshold
     for i in range(len(scores)):
-        if 0 < scores[i] <= min_conf:
+        if ((scores[i] > min_conf) and (scores[i] <= 1.0)):
             # Get bounding box coordinates
             ymin = int(max(1, (boxes[i][0] * imH)))
             xmin = int(max(1, (boxes[i][1] * imW)))
